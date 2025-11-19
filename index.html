@@ -2,30 +2,31 @@
 <html lang="es" data-mode="light">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calculadora GC - V5 (Flat Design)</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Calculadora GC - V5</title>
+    
+    <!-- Icono de la pestaña -->
+    <link rel="icon" type="image/png" href="calculator_icon.png">
+
+    <!-- Estilos Externos (Tailwind y FontAwesome) -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- ESTILOS CSS (Diseño) -->
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
-        
-        /* Paleta Flat Design (Plano) */
-        :root {
-            --primary: #3b82f6;      /* Azul Primario */
-            --secondary: #10b981;    /* Verde Secundario */
 
-            /* Modo Claro (Light Mode) */
-            --bg-light: #f9fafb; /* Un gris muy claro (Tailwind gray-50) */
-            --surface-light: #ffffff; /* Superficie de tarjeta y botones */
-            --shadow-light: none; /* Sin sombra */
-            --border-light: #e5e7eb; /* Borde sutil (Tailwind gray-200) */
+        /* Variables de Color */
+        :root {
+            --primary: #3b82f6;
+            --bg-light: #f9fafb;
+            --surface-light: #ffffff;
+            --border-light: #e5e7eb;
             --text-light: #374151;
             
-            /* Modo Oscuro (Dark Mode) */
             --bg-dark: #1f2937;
             --surface-dark: #374151;
-            --shadow-dark: none; /* Sin sombra */
-            --border-dark: #4b5563; /* Borde oscuro (Tailwind gray-600) */
+            --border-dark: #4b5563;
             --text-dark: #e5e7eb;
         }
 
@@ -33,369 +34,206 @@
             font-family: 'Inter', sans-serif;
             background-color: var(--bg-light);
             color: var(--text-light);
-            transition: background-color 0.5s, color 0.5s;
-            min-height: 100vh;
+            transition: background-color 0.3s, color 0.3s;
+            padding-bottom: 80px; /* Espacio para scroll en móvil */
         }
 
-        /* --------------------------------- */
-        /* --- ESTILOS FLAT DESIGN (PLANO) --- */
-        /* --------------------------------- */
-        
+        /* Tarjetas y Contenedores */
         .flat-card {
             background-color: var(--surface-light);
-            border-radius: 8px; /* Menos redondeado */
-            box-shadow: var(--shadow-light); /* Sin sombra */
-            transition: all 0.5s ease;
-            border: 1px solid var(--border-light); /* Borde definido */
-        }
-
-        .flat-card input,
-        .flat-card select {
-            background-color: #ffffff; /* Fondo blanco para inputs */
-            border: 1px solid #d1d5db;
-            border-radius: 6px; /* Ligeramente redondeado */
-            color: var(--text-light);
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            border: 1px solid var(--border-light);
             transition: all 0.3s ease;
         }
-        
-        .flat-card input:focus,
-        .flat-card select:focus {
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3); /* Mantenemos el anillo de foco */
-            outline: none;
-        }
 
-        /* Botón base */
+        /* Botones */
         .flat-btn {
-            border: none; /* Sin borde */
-            border-radius: 8px; /* Redondeado moderno */
-            box-shadow: var(--shadow-dark); /* Sin sombra */
-            transition: filter 0.2s ease;
-            font-weight: 500;
-            color: white; /* Texto blanco por defecto */
-        }
-
-        .flat-btn:hover {
-            filter: brightness(90%); /* Efecto hover plano */
-        }
-
-        .flat-btn:active {
-            filter: brightness(80%); /* Efecto active plano */
-        }
-        
-        /* --------------------------------- */
-        /* --- Colores Específicos Botones --- */
-        /* --------------------------------- */
-        
-        #saveBtn { background-color: var(--secondary); }
-        #addRowBtn { background-color: var(--primary); }
-        #addTopRowBtn { background-color: #a855f7; } /* purple-500 */
-        #removeRowBtn { background-color: #ef4444; } /* red-500 */
-        #removeTopRowBtn { background-color: #f97316; } /* orange-500 */
-        #resetBtn { background-color: #6b7280; } /* gray-500 */
-
-        /* Iconos de botones de acción */
-        #saveBtn .fas, #addRowBtn .fas, #addTopRowBtn .fas, #removeRowBtn .fas, #removeTopRowBtn .fas, #resetBtn .fas {
-            color: white !important; /* Forzar iconos a blanco */
-        }
-        
-        /* Botón de Modo Oscuro (neutral) */
-        #darkModeToggle {
-            background-color: var(--surface-light);
-            color: var(--text-light);
-            border: 1px solid var(--border-light);
-        }
-        #darkModeToggle .fas { color: var(--text-light) !important; }
-
-        /* Estilos de la tabla (ya eran planos) */
-        .table-header {
-            background: var(--primary);
+            border: none;
+            border-radius: 8px;
             color: white;
-            padding: 8px;
-            font-weight: 600;
+            transition: transform 0.1s;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
         }
+        .flat-btn:active { transform: scale(0.95); }
+
+        .action-btn {
+            width: 42px;
+            height: 42px;
+            font-size: 1.1rem;
+        }
+
+        /* Tabla */
+        .table-header { background: var(--primary); color: white; }
+        .table-row-hover:hover { background-color: #f3f4f6; }
         
-        .table-row-hover {
-            background-color: var(--surface-light);
-            border-bottom: 1px solid #e5e7eb;
+        /* Inputs */
+        .custom-input {
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            background-color: #fff;
+            color: #374151;
+            transition: border-color 0.2s;
         }
-        
-        .table-row-hover:hover {
-            background-color: #f9fafb;
-        }
-
-        /* --- CORRECCIÓN DE VISIBILIDAD DE OPCIONES --- */
-        #predefinedFileSelect option {
-            background-color: white; 
-            color: #1f2937; 
-        }
-        
-        /* ---------------------------------- */
-        /* --- ESTILOS DEL MODO OSCURO --- */
-        /* ---------------------------------- */
-        
-        html[data-mode="dark"] body {
-            background-color: var(--bg-dark);
-            color: var(--text-dark);
+        .custom-input:focus {
+            border-color: var(--primary);
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
         }
 
-        html[data-mode="dark"] .flat-card {
-            background-color: var(--surface-dark);
-            box-shadow: var(--shadow-dark);
-            border: 1px solid var(--border-dark);
-        }
+        /* Modo Oscuro */
+        html[data-mode="dark"] body { background-color: var(--bg-dark); color: var(--text-dark); }
+        html[data-mode="dark"] .flat-card { background-color: var(--surface-dark); border-color: var(--border-dark); }
+        html[data-mode="dark"] .custom-input, 
+        html[data-mode="dark"] select { background-color: #4b5563; border-color: #6b7280; color: white; }
+        html[data-mode="dark"] .table-row-hover:hover { background-color: #4b5563; }
+        html[data-mode="dark"] .action-container { border-top-color: #4b5563; background-color: #374151; }
 
-        html[data-mode="dark"] .flat-card input,
-        html[data-mode="dark"] .flat-card select {
-            background-color: var(--surface-dark); /* Fondo de input más oscuro */
-            border: 1px solid #4b5563;
-            color: var(--text-dark);
-        }
+        /* Colores de Ganancia */
+        .profit-positive { color: #10b981; font-weight: 700; }
+        .profit-negative { color: #ef4444; font-weight: 700; }
+        html[data-mode="dark"] .profit-positive { color: #4ade80; }
+        html[data-mode="dark"] .profit-negative { color: #f87171; }
 
-        /* Botones en modo oscuro (los de color no cambian, solo el de modo) */
-        html[data-mode="dark"] #darkModeToggle {
-            background-color: var(--surface-dark);
-            color: var(--text-dark);
-            border: 1px solid var(--border-dark);
-        }
-        html[data-mode="dark"] #darkModeToggle .fas { color: var(--text-dark) !important; }
-
-
-        html[data-mode="dark"] .table-row-hover {
-            background-color: var(--surface-dark);
-            border-bottom: 1px solid #4b5563;
-        }
-
-        html[data-mode="dark"] .table-row-hover:hover {
-            background-color: #4b5563; /* Un poco más oscuro para el hover */
-        }
-
-        /* --- NUEVO: Colores de ganancia más brillantes para Modo Oscuro --- */
-        html[data-mode="dark"] .profit-cell.text-green-600 {
-            color: #4ade80 !important; /* Un verde más brillante (Tailwind green-500) */
-        }
-        
-        html[data-mode="dark"] .profit-cell.text-red-600 {
-            color: #f87171 !important; /* Un rojo más brillante (Tailwind red-400) */
-        }
-
-        /* --- CORRECCIÓN DE VISIBILIDAD DE OPCIONES EN DARK MODE --- */
-        html[data-mode="dark"] #predefinedFileSelect option {
-            background-color: #374151;
-            color: white;
-        }
-
-        /* Estilo para el FAB (Botón de Acción Flotante) */
+        /* Botón Flotante (Luna/Sol) */
         .fab {
             position: fixed;
             bottom: 20px;
             right: 20px;
-            z-index: 1000;
+            z-index: 50;
+            background-color: var(--surface-light);
+            color: var(--text-light);
+            border: 1px solid var(--border-light);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.2);
         }
-        
-        /* Estilos de Ganancia y Pérdida */
-        .profit-cell.text-green-600 {
-            color: var(--secondary) !important;
-            font-weight: 600;
-        }
-        
-        .profit-cell.text-red-600 {
-            color: #ef4444 !important;
-            font-weight: 600;
-        }
-
-        /* --- CORRECCIÓN: ESTILOS PARA TOOLTIPS --- */
-        [data-tooltip] {
-            position: relative;
-        }
-        [data-tooltip]::after {
-            content: attr(data-tooltip);
-            position: absolute;
-            bottom: 125%; /* Posición arriba del botón */
-            left: 50%;
-            transform: translateX(-50%);
-            background-color: #374151; /* Fondo oscuro */
-            color: white;
-            padding: 4px 8px;
-            border-radius: 6px;
-            font-size: 0.8rem;
-            font-weight: 500;
-            white-space: nowrap;
-            opacity: 0;
-            visibility: hidden;
-            transition: opacity 0.2s ease, visibility 0.2s ease;
-            z-index: 10;
-        }
-        [data-tooltip]:hover::after {
-            opacity: 1;
-            visibility: visible;
-        }
-
-        /* --- NUEVO: Color para el icono del sol --- */
-        /* !important añadido para asegurar que sobreescriba otras reglas */
-        #toggleIcon.fa-sun {
-            color: #f59e0b !important; /* Un amarillo sol (Tailwind yellow-500) */
-        }
+        html[data-mode="dark"] .fab { background-color: var(--surface-dark); color: var(--text-dark); border-color: var(--border-dark); }
+        #toggleIcon.fa-sun { color: #fbbf24; }
     </style>
 </head>
-<body class="flex flex-col items-center justify-center p-4 py-8">
+<body class="flex flex-col items-center min-h-screen p-4">
 
-    <!-- Botón de Modo Oscuro Flotante (FAB) -->
-    <!-- CAMBIO: .soft-shadow-btn -> .flat-btn -->
-    <button id="darkModeToggle" class="fab flat-btn p-4 text-xl">
+    <!-- Botón Modo Oscuro -->
+    <button id="darkModeToggle" class="fab flat-btn p-4 text-xl" aria-label="Cambiar tema">
         <i class="fas fa-moon" id="toggleIcon"></i>
     </button>
-    
-    <!-- Contenedor principal de la calculadora -->
-    <!-- CAMBIO: .soft-shadow-card -> .flat-card -->
-    <div class="flat-card p-4 md:p-8 max-w-4xl w-full mb-8">
+
+    <!-- Título Visible en Móvil -->
+    <h1 class="text-2xl font-bold mb-4 text-gray-700 dark:text-gray-200 md:hidden">Calculadora GC</h1>
+
+    <!-- Tarjeta Principal -->
+    <div class="flat-card w-full max-w-5xl overflow-hidden mb-20 md:mb-8">
         
-        <!-- Contenedor de tabla - Sin sombra, solo borde del flat-card -->
-        <div class="rounded-lg overflow-x-auto border border-gray-200 dark:border-gray-700">
-            <table class="w-full text-left">
+        <!-- Tabla con Scroll Horizontal -->
+        <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse whitespace-nowrap">
                 <thead>
-                    <tr class="table-header">
-                        <th class="p-3 text-center text-xs tracking-wider">#</th>
-                        <th class="p-3 text-xs tracking-wider">Ent</th>
-                        <th class="p-3 text-xs tracking-wider">Valor</th>
-                        <th class="p-3 text-xs tracking-wider">Carga</th>
-                        <th class="p-3 text-xs tracking-wider">Inv</th>
-                        <th class="p-3 text-xs tracking-wider">Pago</th>
-                        <th class="p-3 text-xs tracking-wider">Ganancia</th>
+                    <tr class="table-header text-sm uppercase tracking-wider">
+                        <th class="p-3 text-center">#</th>
+                        <th class="p-3">Ent</th>
+                        <th class="p-3">Valor</th>
+                        <th class="p-3">Carga</th>
+                        <th class="p-3">Inv</th>
+                        <th class="p-3">Pago</th>
+                        <th class="p-3">Ganancia</th>
                     </tr>
                 </thead>
                 <tbody id="resultsBody" class="text-sm">
-                    <!-- Filas generadas dinámicamente por JavaScript -->
+                    <!-- Fila de Carga -->
+                    <tr id="loadingRow">
+                        <td colspan="7" class="p-10 text-center text-gray-500 dark:text-gray-400">
+                            <i class="fas fa-circle-notch fa-spin text-3xl mb-2 text-blue-500"></i>
+                            <br>Cargando aplicación...
+                        </td>
+                    </tr>
                 </tbody>
             </table>
         </div>
 
-        <!-- Controles de la aplicación -->
-        <div class="mt-8 flex flex-col gap-5">
-            
-            <!-- Grupo ÚNICO para todas las acciones (Archivos y Filas/Reset) -->
-            <div class="flex flex-wrap gap-3 justify-center items-center">
+        <!-- Panel de Control (Botones) -->
+        <div class="p-4 bg-gray-50 dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 action-container">
+            <div class="flex flex-col md:flex-row justify-between items-center gap-4">
                 
-                <!-- Botones de Archivo -->
-                <!-- CAMBIO: .soft-shadow-btn -> .flat-btn -->
-                <button id="saveBtn" class="flat-btn px-4 py-3 font-medium flex items-center text-sm relative" data-tooltip="Guardar Datos">
-                    <i class="fas fa-save text-base mr-1"></i> 
-                </button>
-                
-                <!-- Selector de carga predefinida - Estilo base de .flat-card -->
-                <div class="flex items-center gap-2">
-                    <select id="predefinedFileSelect" class="w-40 px-3 py-2 text-sm">
-                        <option value="">Seleccionar Archivo</option>
-                        <option value="08-13-0400K">400 K - 08 - 13</option>
-                        <option value="08-13-0450K">450 K - 08 - 13</option>
-                        <option value="08-13-0500K">500 K - 08 - 13</option>
-                        <option value="08-14-0500K">500 K - 08 - 14</option>
-                        <option value="08-14-0550K">550 K - 08 - 14</option>
-                        <option value="08-14-0600K">600 K - 08 - 14</option>
-						<option value="09-13-0600K">600 K - 09 - 13</option>
-						<option value="09-13-0640K">640 K - 09 - 13</option>
-						<option value="09-13-0700K">700 K - 09 - 13</option>
-                        <option value="09-14-0750K">750 K - 09 - 14</option>
-                        <option value="09-14-0800K">800 K - 09 - 14</option>
-                        <option value="09-14-0850K">850 K - 09 - 14</option>
-                        <option value="09-14-0900K">900 K - 09 - 14</option>
-						<option value="09-14-0950K">950 K - 09 - 14</option>
-                        <option value="09-14-1000M">1000 M - 09 - 14</option>
-						<option value="09-14-1050M">1050 M - 09 - 14</option>
-                        <option value="10-13-1100M">1100 M - 10 - 13</option>
-                        <option value="09-14-1200M">1200 M - 09 - 14</option>
-                        <option value="10-14-1200M">1200 M - 10 - 14</option>
-                        <option value="10-14-1250M">1250 M - 10 - 14</option>
-						<option value="10-14-1450M">1450 M - 10 - 14</option>
-						<option value="10-14-1750M">1750 M - 10 - 14</option>
-						<option value="10-14-1900M">1900 M - 10 - 14</option>
-						<option value="10-14-2000M">2000 M - 10 - 14</option>
-						<option value="11-13-2000M">2000 M - 11 - 13</option>
-						<option value="8000_400K_08_13">$8000 400K 08 13</option>
-						<option value="16000_700K_08_14">$16000 700K 08 14</option>
-                    </select>
+                <!-- Selector y Guardar -->
+                <div class="flex w-full md:w-auto gap-2">
+                    <button id="saveBtn" class="flat-btn action-btn bg-emerald-500 hover:bg-emerald-600 flex-shrink-0">
+                        <i class="fas fa-save"></i>
+                    </button>
+                    <div class="relative w-full">
+                        <select id="predefinedFileSelect" class="w-full md:w-64 h-full pl-3 pr-8 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 text-sm appearance-none focus:ring-2 focus:ring-blue-500 outline-none">
+                            <option value="">Seleccionar Archivo...</option>
+                            <option value="08-13-0400K">400 K - 08 - 13</option>
+                            <option value="08-13-0450K">450 K - 08 - 13</option>
+                            <option value="08-13-0500K">500 K - 08 - 13</option>
+                            <option value="08-14-0500K">500 K - 08 - 14</option>
+                            <option value="08-14-0550K">550 K - 08 - 14</option>
+                            <option value="08-14-0600K">600 K - 08 - 14</option>
+                            <option value="09-13-0600K">600 K - 09 - 13</option>
+                            <option value="09-13-0640K">640 K - 09 - 13</option>
+                            <option value="09-13-0700K">700 K - 09 - 13</option>
+                            <option value="09-14-0750K">750 K - 09 - 14</option>
+                            <option value="09-14-0800K">800 K - 09 - 14</option>
+                            <option value="09-14-0850K">850 K - 09 - 14</option>
+                            <option value="09-14-0900K">900 K - 09 - 14</option>
+                            <option value="09-14-0950K">950 K - 09 - 14</option>
+                            <option value="09-14-1000M">1000 M - 09 - 14</option>
+                            <option value="09-14-1050M">1050 M - 09 - 14</option>
+                            <option value="10-13-1100M">1100 M - 10 - 13</option>
+                            <option value="09-14-1200M">1200 M - 09 - 14</option>
+                            <option value="10-14-1200M">1200 M - 10 - 14</option>
+                            <option value="10-14-1250M">1250 M - 10 - 14</option>
+                            <option value="10-14-1450M">1450 M - 10 - 14</option>
+                            <option value="10-14-1750M">1750 M - 10 - 14</option>
+                            <option value="10-14-1900M">1900 M - 10 - 14</option>
+                            <option value="10-14-2000M">2000 M - 10 - 14</option>
+                            <option value="11-13-2000M">2000 M - 11 - 13</option>
+                            <option value="8000_400K_08_13">$8000 400K 08 13</option>
+                            <option value="16000_700K_08_14">$16000 700K 08 14</option>
+                        </select>
+                        <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-500">
+                            <i class="fas fa-chevron-down text-xs"></i>
+                        </div>
+                    </div>
                 </div>
 
-                <!-- Botones de Acción de Fila/Reset (Icono y Texto) -->
-                <!-- CAMBIO: .soft-shadow-btn -> .flat-btn -->
+                <!-- Botones de Acción -->
+                <div class="flex flex-wrap justify-center gap-3 w-full md:w-auto">
+                    <button id="addRowBtn" class="flat-btn action-btn bg-blue-500 hover:bg-blue-600" title="Añadir Fila"><i class="fas fa-plus"></i></button>
+                    <button id="addTopRowBtn" class="flat-btn action-btn bg-purple-500 hover:bg-purple-600" title="Añadir Arriba"><i class="fas fa-arrow-up"></i></button>
+                    <div class="w-px h-10 bg-gray-300 dark:bg-gray-600 mx-1 hidden md:block"></div>
+                    <button id="removeRowBtn" class="flat-btn action-btn bg-red-500 hover:bg-red-600" title="Borrar Fila"><i class="fas fa-trash"></i></button>
+                    <button id="removeTopRowBtn" class="flat-btn action-btn bg-orange-500 hover:bg-orange-600" title="Borrar Arriba"><i class="fas fa-backspace"></i></button>
+                    <button id="resetBtn" class="flat-btn action-btn bg-gray-500 hover:bg-gray-600 ml-auto md:ml-0" title="Reiniciar"><i class="fas fa-redo"></i></button>
+                </div>
 
-                <!-- Botón de Añadir Fila (Azul) -->
-                <button id="addRowBtn" class="flat-btn px-4 py-3 font-medium flex items-center text-sm relative" data-tooltip="Añadir Fila">
-                    <i class="fas fa-plus-circle text-base mr-1"></i> 
-                </button>
-
-                <!-- Botón de Añadir Fila Superior (Púrpura) -->
-                <button id="addTopRowBtn" class="flat-btn px-4 py-3 font-medium flex items-center text-sm relative" data-tooltip="Añadir Fila Superior">
-                    <i class="fas fa-plus-circle text-base mr-1"></i> 
-                </button>
-
-                <!-- Botón de Eliminar Última Fila (Basurero/Trash) -->
-                <button id="removeRowBtn" class="flat-btn px-4 py-3 font-medium flex items-center text-sm relative" data-tooltip="Eliminar Última Fila">
-                    <i class="fas fa-trash-alt text-base mr-1"></i> 
-                </button>
-
-                <!-- Botón para Eliminar Fila Superior (Naranja - Eliminar Top) -->
-                <button id="removeTopRowBtn" class="flat-btn px-4 py-3 font-medium flex items-center text-sm relative" data-tooltip="Eliminar Fila Superior">
-                    <i class="fas fa-chevron-circle-up text-base mr-1"></i> 
-                </button>
-                
-                <!-- Botón de Reset (Gris - Reiniciar Tabla) -->
-                <button id="resetBtn" class="flat-btn px-4 py-3 font-medium flex items-center text-sm relative" data-tooltip="Reiniciar Tabla a valores por defecto">
-                    <i class="fas fa-redo-alt text-base mr-1"></i> 
-                </button>
-                
             </div>
-            
         </div>
     </div>
 
+    <!-- LÓGICA JAVASCRIPT (Script) -->
     <script>
         document.addEventListener('DOMContentLoaded', () => {
+            // Referencias
             const resultsBody = document.getElementById('resultsBody');
             const saveBtn = document.getElementById('saveBtn');
             const resetBtn = document.getElementById('resetBtn');
             const addRowBtn = document.getElementById('addRowBtn');
-            const addTopRowBtn = document.getElementById('addTopRowBtn'); // Nuevo
+            const addTopRowBtn = document.getElementById('addTopRowBtn');
             const removeRowBtn = document.getElementById('removeRowBtn');
-            const removeTopRowBtn = document.getElementById('removeTopRowBtn'); 
+            const removeTopRowBtn = document.getElementById('removeTopRowBtn');
             const predefinedFileSelect = document.getElementById('predefinedFileSelect');
-            
-            // --- Componentes del Modo Oscuro ---
             const darkModeToggle = document.getElementById('darkModeToggle');
             const toggleIcon = document.getElementById('toggleIcon');
             const html = document.documentElement;
 
-            const toggleDarkMode = () => {
-                const currentMode = html.getAttribute('data-mode');
-                const newMode = currentMode === 'dark' ? 'light' : 'dark';
-                
-                html.setAttribute('data-mode', newMode);
-                
-                if (newMode === 'dark') {
-                    toggleIcon.classList.replace('fa-moon', 'fa-sun');
-                    localStorage.setItem('theme', 'dark'); 
-                } else {
-                    toggleIcon.classList.replace('fa-sun', 'fa-moon');
-                    localStorage.setItem('theme', 'light');
-                }
-            };
+            // Datos Base
+            const defaultInitialValues = [250,500,1000,2000,4000,7500,13000,22000,37000,61500];
+            let initialValues = [...defaultInitialValues];
+            let positionValues = Array(defaultInitialValues.length).fill(14);
 
-            const initializeTheme = () => {
-                const storedTheme = localStorage.getItem('theme');
-                if (storedTheme === 'light') {
-                    html.setAttribute('data-mode', 'light');
-                    toggleIcon.classList.replace('fa-sun', 'fa-moon');
-                } else {
-                    html.setAttribute('data-mode', 'dark');
-                    toggleIcon.classList.replace('fa-moon', 'fa-sun');
-                }
-            };
-            
-            darkModeToggle.addEventListener('click', toggleDarkMode);
-            initializeTheme();
-            // ------------------------------------------------
-
-            // --- Datos Predefinidos (sin cambios en valores) ---
+            // Datos Predefinidos
             const predefinedData = {
                 '08-13-0400K': { "initialValues": [250, 500, 1000, 1750, 3000, 4750, 7750, 12000], "positionValues": [12, 13, 13, 13, 13, 13, 13, 13] },
                 '08-13-0450K': { "initialValues": [250, 500, 1000, 2000, 3250, 5250, 8750, 13750], "positionValues": [12, 13, 13, 13, 13, 13, 13, 13] },
@@ -403,16 +241,16 @@
                 '08-14-0500K': { "initialValues": [250, 500, 1000, 1750, 3000, 5250, 9000, 15000], "positionValues": [12, 14, 14, 14, 14, 14, 14, 14] },
                 '08-14-0550K': { "initialValues": [250, 500, 1000, 2000, 3500, 6000, 9750, 16250], "positionValues": [12, 14, 14, 14, 14, 14, 14, 14] },
                 '09-13-0600K': { "initialValues": [250, 500, 1000, 1750, 2750, 4500, 7000, 11000, 17500], "positionValues": [12, 13, 13, 13, 13, 13, 13, 13, 13] },
-				'08-14-0600K': { "initialValues": [250, 500, 1000, 2000, 3750, 6500, 10750, 18000], "positionValues": [12, 14, 14, 14, 14, 14, 14, 14] },
-				'09-13-0640K': { "initialValues": [250, 500, 1000, 1750, 2750, 4750, 7500, 12000, 18750], "positionValues": [12, 13, 13, 13, 13, 13, 13, 13, 13] },
-				'09-13-0700K': { "initialValues": [250, 500, 1000, 2000, 3250, 5250, 8500, 13750, 21000], "positionValues": [12, 13, 13, 13, 13, 13, 13, 13, 12] },
-				'09-14-0750K': { "initialValues": [250, 500, 1000, 1750, 3000, 5000, 8250, 13750, 21750], "positionValues": [12, 14, 14, 14, 14, 14, 14, 14, 13] },
-				'09-14-0800K': { "initialValues": [250, 500, 1000, 1750, 3000, 5000, 8500, 14000, 23250], "positionValues": [12, 14, 14, 14, 14, 14, 14, 14, 14] },
+                '08-14-0600K': { "initialValues": [250, 500, 1000, 2000, 3750, 6500, 10750, 18000], "positionValues": [12, 14, 14, 14, 14, 14, 14, 14] },
+                '09-13-0640K': { "initialValues": [250, 500, 1000, 1750, 2750, 4750, 7500, 12000, 18750], "positionValues": [12, 13, 13, 13, 13, 13, 13, 13, 13] },
+                '09-13-0700K': { "initialValues": [250, 500, 1000, 2000, 3250, 5250, 8500, 13750, 21000], "positionValues": [12, 13, 13, 13, 13, 13, 13, 13, 12] },
+                '09-14-0750K': { "initialValues": [250, 500, 1000, 1750, 3000, 5000, 8250, 13750, 21750], "positionValues": [12, 14, 14, 14, 14, 14, 14, 14, 13] },
+                '09-14-0800K': { "initialValues": [250, 500, 1000, 1750, 3000, 5000, 8500, 14000, 23250], "positionValues": [12, 14, 14, 14, 14, 14, 14, 14, 14] },
                 '09-14-0850K': { "initialValues": [250, 500, 1000, 1750, 3000, 5250, 9000, 15000, 25000], "positionValues": [12, 14, 14, 14, 14, 14, 14, 14, 14] },
                 '09-14-0900K': { "initialValues": [250, 500, 1000, 2000, 3500, 5750, 9500, 15750, 26000], "positionValues": [12, 14, 14, 14, 14, 14, 14, 14, 14] },
-				'09-14-0950K': { "initialValues": [250, 500, 1000, 2000, 3500, 6000, 10000, 16750, 28000], "positionValues": [12, 14, 14, 14, 14, 14, 14, 14, 14] },
+                '09-14-0950K': { "initialValues": [250, 500, 1000, 2000, 3500, 6000, 10000, 16750, 28000], "positionValues": [12, 14, 14, 14, 14, 14, 14, 14, 14] },
                 '09-14-1000M': { "initialValues": [250, 500, 1000, 2000, 3500, 6000, 10500, 17750, 30000], "positionValues": [12, 14, 14, 14, 14, 14, 14, 14, 14] },
-				'09-14-1050M': { "initialValues": [250, 500, 1000, 2000, 3750, 6500, 11000, 18500, 31500], "positionValues": [12, 14, 14, 14, 14, 14, 14, 14, 14] },
+                '09-14-1050M': { "initialValues": [250, 500, 1000, 2000, 3750, 6500, 11000, 18500, 31500], "positionValues": [12, 14, 14, 14, 14, 14, 14, 14, 14] },
                 '10-13-1100M': { "initialValues": [250, 500, 1000, 1750, 3000, 5000, 8000, 13000, 20500, 32000], "positionValues": [12, 13, 13, 13, 13, 13, 13, 13, 13, 13] },
                 '09-14-1200M': { "initialValues": [250, 500, 1000, 2000, 4000, 7250, 12500, 21750, 36500], "positionValues": [12, 14, 14, 14, 14, 14, 14, 14, 14] },
                 '10-14-1200M': { "initialValues": [250, 500, 1000, 1750, 3000, 5000, 8250, 13750, 21750, 34250], "positionValues": [12, 14, 14, 14, 14, 14, 14, 14, 13, 13] },
@@ -423,13 +261,8 @@
                 '10-14-2000M': { "initialValues": [250, 500, 1000, 2000, 4000, 7000, 12500, 21000, 35500, 59000], "positionValues": [12, 14, 14, 14, 14, 14, 14, 14, 14, 14] },
                 '11-13-2000M': { "initialValues": [250, 500, 1000, 2000, 3500, 5500, 9000, 14500, 23000, 36500, 58000], "positionValues": [12, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13] },
                 '8000_400K_08_13': { "initialValues": [250, 500, 1000, 1750, 3000, 4750, 7500, 11750], "positionValues": [32, 13, 13, 13, 13, 13, 13, 13] },
-				'16000_700K_08_14': { "initialValues": [500, 750, 1500, 2500, 4250, 7250, 12250, 20500], "positionValues": [32, 12, 14, 14, 14, 14, 14, 14] },
+                '16000_700K_08_14': { "initialValues": [500, 750, 1500, 2500, 4250, 7250, 12250, 20500], "positionValues": [32, 12, 14, 14, 14, 14, 14, 14] },
             };
-
-            const defaultInitialValues = [250,500,1000,2000,4000,7500,13000,22000,37000,61500];
-            
-            let initialValues = [...defaultInitialValues];
-            let positionValues = Array(defaultInitialValues.length).fill(14);
 
             const formatCurrency = (num) => {
                 if (isNaN(num)) return '$0';
@@ -442,194 +275,115 @@
             };
 
             const calculateAndDisplay = () => {
-                const rows = resultsBody.getElementsByTagName('tr');
-                let cumulativeInvestment = 0;
-                let hasInvalidInput = false;
+                 const rows = Array.from(resultsBody.querySelectorAll('tr:not(#loadingRow):not(.empty-state)'));
+                 let runningInvestment = 0;
+                 
+                 rows.forEach((row, index) => {
+                     const posInput = row.querySelector('.position-input');
+                     const valInput = row.querySelector('.initial-value-input');
+                     
+                     if (!posInput || !valInput) return;
 
-                for (let i = 0; i < rows.length; i++) {
-                    if (rows[i].classList.contains('empty-state-row')) continue;
-
-                    const row = rows[i];
-                    const positionInput = row.querySelector('.position-input');
-                    const initialValueInput = row.querySelector('.initial-value-input');
-                    const positionError = row.querySelector('.position-error');
-                    const initialValueError = row.querySelector('.initial-value-error');
-
-                    const position = parseInt(positionInput.value);
-                    if (isNaN(position) || position < 1) {
-                        positionInput.classList.add('border-red-500');
-                        positionError.textContent = "Inválido";
-                        hasInvalidInput = true;
-                    } else {
-                        positionInput.classList.remove('border-red-500');
-                        positionError.textContent = "";
-                        positionValues[i] = position;
-                    }
-
-                    const initialValue = parseFloat(initialValueInput.value);
-                    if (isNaN(initialValue) || initialValue <= 0) {
-                        initialValueInput.classList.add('border-red-500');
-                        initialValueError.textContent = "Inválido";
-                        hasInvalidInput = true;
-                    } else {
-                        initialValueInput.classList.remove('border-red-500');
-                        initialValueError.textContent = "";
-                        initialValues[i] = initialValue;
-                    }
-                }
-
-                if (hasInvalidInput) {
-                    for (let i = 0; i < rows.length; i++) {
-                        if (rows[i].classList.contains('empty-state-row')) continue;
-                        const row = rows[i];
-                        row.querySelector('.charge-cell').textContent = "N/A";
-                        row.querySelector('.investment-cell').textContent = "N/A";
-                        row.querySelector('.payment-cell').textContent = "N/A";
-                        row.querySelector('.profit-cell').textContent = "N/A";
-                    }
-                    return;
-                }
-
-                for (let i = 0; i < initialValues.length; i++) {
-                    const row = rows[i];
-                    
-                    const position = positionValues[i];
-                    const initialValue = initialValues[i];
-                    
-                    const chargeCell = row.querySelector('.charge-cell');
-                    const investmentCell = row.querySelector('.investment-cell');
-                    const paymentCell = row.querySelector('.payment-cell');
-                    const profitCell = row.querySelector('.profit-cell');
-                    
-                    const charge = initialValue * position;
-                    cumulativeInvestment += charge;
-                    const payment = initialValue * 36;
-                    const profit = payment - cumulativeInvestment;
-
-                    chargeCell.textContent = formatCurrency(charge);
-                    investmentCell.textContent = formatCurrency(cumulativeInvestment);
-                    paymentCell.textContent = formatCurrency(payment);
-                    profitCell.textContent = formatCurrency(profit);
-
-                    profitCell.classList.remove('text-green-600', 'text-red-600');
-                    if (profit >= 0) {
-                        profitCell.classList.add('text-green-600');
-                    } else {
-                        profitCell.classList.add('text-red-600');
-                    }
-                }
+                     const pos = parseInt(posInput.value) || 0;
+                     const val = parseFloat(valInput.value) || 0;
+                     
+                     const charge = val * pos;
+                     runningInvestment += charge;
+                     
+                     const payment = val * 36;
+                     const profit = payment - runningInvestment;
+                     
+                     row.querySelector('.charge-cell').textContent = formatCurrency(charge);
+                     row.querySelector('.investment-cell').textContent = formatCurrency(runningInvestment);
+                     row.querySelector('.payment-cell').textContent = formatCurrency(payment);
+                     
+                     const profitCell = row.querySelector('.profit-cell');
+                     profitCell.textContent = formatCurrency(profit);
+                     profitCell.className = `p-3 profit-cell font-medium ${profit >= 0 ? 'profit-positive' : 'profit-negative'}`;
+                 });
             };
-            
+
             const generateRows = () => {
                 let htmlContent = '';
-                
                 if (initialValues.length < 1) {
-                    htmlContent = `
-                        <tr class="table-row-hover text-sm empty-state-row">
-                            <td colspan="7" class="p-6 text-center text-gray-500 italic">
-                                No hay filas. Usa el botón <i class="fas fa-plus-circle text-blue-500"></i> para añadir una.
-                            </td>
-                        </tr>
-                    `;
-                    resultsBody.innerHTML = htmlContent;
+                    resultsBody.innerHTML = `<tr class="empty-state"><td colspan="7" class="p-6 text-center text-gray-500 dark:text-gray-400">No hay filas. Usa el botón azul para añadir.</td></tr>`;
                     return;
                 }
 
                 for (let i = 0; i < initialValues.length; i++) {
-                    const initialValue = initialValues[i];
-                    const positionValue = positionValues[i];
-                    
                     htmlContent += `
-                        <tr class="table-row-hover text-sm">
-                            <td class="p-3 text-center font-medium">${i + 1}</td>
+                        <tr class="table-row-hover text-sm border-b border-gray-100 dark:border-gray-700 transition-colors">
+                            <td class="p-3 text-center text-gray-500 font-medium">${i + 1}</td>
                             <td class="p-3">
-                                <input type="number" class="w-16 px-2 py-1 position-input focus:ring-primary text-sm" value="${positionValue}" min="1" max="36">
-                                <span class="text-red-500 text-xs font-medium block position-error"></span>
+                                <input type="number" class="w-12 md:w-16 px-1 py-1 custom-input position-input text-center text-sm" value="${positionValues[i]}" min="1" max="36">
                             </td>
                             <td class="p-3">
-                                <div class="relative">
-                                    <span class="absolute inset-y-0 left-0 flex items-center pl-2 text-gray-500 dark:text-gray-400 text-sm">$</span>
-                                    <input type="number" step="250" class="w-28 pl-6 pr-2 py-1 initial-value-input focus:ring-primary text-sm" value="${initialValue}">
-                                    <span class="text-red-500 text-xs font-medium block initial-value-error"></span>
+                                <div class="relative flex items-center">
+                                    <span class="absolute left-2 text-gray-400 text-xs">$</span>
+                                    <input type="number" step="250" class="w-24 md:w-28 pl-5 pr-2 py-1 custom-input initial-value-input text-sm" value="${initialValues[i]}">
                                 </div>
                             </td>
                             <td class="p-3 charge-cell font-medium"></td>
-                            <td class="p-3 investment-cell"></td>
-                            <td class="p-3 payment-cell font-medium"></td>
-                            <td class="p-3 profit-cell font-medium"></td>
+                            <td class="p-3 investment-cell text-gray-600 dark:text-gray-400"></td>
+                            <td class="p-3 payment-cell font-medium text-blue-600 dark:text-blue-400"></td>
+                            <td class="p-3 profit-cell"></td>
                         </tr>
                     `;
                 }
                 resultsBody.innerHTML = htmlContent;
-                
                 calculateAndDisplay();
             };
 
+            // Listeners
             resultsBody.addEventListener('input', (e) => {
-                if (e.target.classList.contains('position-input') || 
-                    e.target.classList.contains('initial-value-input')) 
-                {
-                    calculateAndDisplay();
+                if (e.target.classList.contains('position-input') || e.target.classList.contains('initial-value-input')) {
+                     const rows = Array.from(resultsBody.querySelectorAll('tr:not(#loadingRow):not(.empty-state)'));
+                     const row = e.target.closest('tr');
+                     const index = rows.indexOf(row);
+                     
+                     if(index > -1) {
+                         if(e.target.classList.contains('position-input')) positionValues[index] = parseInt(e.target.value) || 0;
+                         if(e.target.classList.contains('initial-value-input')) initialValues[index] = parseFloat(e.target.value) || 0;
+                     }
+                     calculateAndDisplay();
                 }
             });
 
-            // --- Funcionalidad del Botones ---
-            
+            addRowBtn.addEventListener('click', () => {
+                const lastVal = initialValues.length > 0 ? initialValues[initialValues.length - 1] : defaultInitialValues[0];
+                initialValues.push(lastVal * 2);
+                positionValues.push(14);
+                generateRows();
+            });
+
+            addTopRowBtn.addEventListener('click', () => {
+                const firstVal = initialValues.length > 0 ? initialValues[0] : defaultInitialValues[0];
+                initialValues.unshift(Math.max(50, Math.round(firstVal / 2)));
+                positionValues.unshift(14);
+                generateRows();
+            });
+
+            removeRowBtn.addEventListener('click', () => {
+                if (initialValues.length > 0) { initialValues.pop(); positionValues.pop(); generateRows(); }
+            });
+
+            removeTopRowBtn.addEventListener('click', () => {
+                if (initialValues.length > 0) { initialValues.shift(); positionValues.shift(); generateRows(); }
+            });
+
             resetBtn.addEventListener('click', () => {
                 initialValues = [...defaultInitialValues];
                 positionValues = Array(defaultInitialValues.length).fill(14);
                 generateRows();
             });
 
-            addRowBtn.addEventListener('click', () => {
-                const lastInitialValue = initialValues.length > 0 ? initialValues[initialValues.length - 1] : defaultInitialValues[0];
-                const newInitialValue = lastInitialValue * 2;
-                const newPositionValue = 14;
-                
-                initialValues.push(newInitialValue);
-                positionValues.push(newPositionValue);
-                
-                generateRows();
-            });
-
-            addTopRowBtn.addEventListener('click', () => {
-                const firstInitialValue = initialValues.length > 0 ? initialValues[0] : defaultInitialValues[0];
-                const newInitialValue = Math.max(50, Math.round(firstInitialValue / 2)); 
-                const newPositionValue = 14;
-                
-                initialValues.unshift(newInitialValue);
-                positionValues.unshift(newPositionValue);
-                
-                generateRows();
-            });
-
-            removeRowBtn.addEventListener('click', () => {
-                if (initialValues.length > 0) {
-                    initialValues.pop();
-                    positionValues.pop();
-                    generateRows();
-                }
-            });
-
-            removeTopRowBtn.addEventListener('click', () => {
-                if (initialValues.length > 0) {
-                    initialValues.shift();
-                    positionValues.shift();
-                    generateRows();
-                }
-            });
-
             saveBtn.addEventListener('click', () => {
-                const dataToSave = { 
-                    initialValues: initialValues, 
-                    positionValues: positionValues 
-                };
-                const data = JSON.stringify(dataToSave);
-                const blob = new Blob([data], { type: 'text/plain' });
+                const dataToSave = { initialValues, positionValues };
+                const blob = new Blob([JSON.stringify(dataToSave)], { type: 'text/plain' });
                 const url = URL.createObjectURL(blob);
                 const a = document.createElement('a');
                 a.href = url;
-                a.download = 'calculos.txt';
+                a.download = 'calculadora_gc_datos.txt';
                 document.body.appendChild(a);
                 a.click();
                 document.body.removeChild(a);
@@ -637,57 +391,35 @@
             });
 
             predefinedFileSelect.addEventListener('change', () => {
-                const selectedFile = predefinedFileSelect.value;
-                if (selectedFile && predefinedData[selectedFile]) {
-                    initialValues = [...predefinedData[selectedFile].initialValues];
-                    positionValues = [...predefinedData[selectedFile].positionValues];
+                const selected = predefinedFileSelect.value;
+                if (selected && predefinedData[selected]) {
+                    initialValues = [...predefinedData[selected].initialValues];
+                    positionValues = [...predefinedData[selected].positionValues];
                     generateRows();
-                    showMessageBox('Cargado', `Datos predefinidos '${selectedFile}' cargados.`);
-                } else if (!selectedFile) {
+                } else if (!selected) {
                     initialValues = [...defaultInitialValues];
                     positionValues = Array(defaultInitialValues.length).fill(14);
                     generateRows();
                 }
             });
 
-            // CAMBIO: .soft-shadow-card -> .flat-card
-            // CAMBIO: .soft-shadow-btn -> .flat-btn
-            const showMessageBox = (title, message) => {
-                const existingBox = document.querySelector('.custom-message-box');
-                if (existingBox) existingBox.remove();
-
-                const box = document.createElement('div');
-                box.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 custom-message-box z-50 transition-opacity duration-300 ease-out opacity-0';
-                
-                box.innerHTML = `
-                    <div class="flat-card p-6 w-full max-w-sm text-center transform transition-all duration-300 ease-out scale-95 opacity-0">
-                        <h3 class="text-xl font-bold mb-2">${title}</h3>
-                        <p class="opacity-80 mb-4">${message}</p>
-                        <button class="flat-btn bg-blue-500 text-white px-4 py-2 text-sm font-medium w-full mt-2">OK</button>
-                    </div>
-                `;
-                document.body.appendChild(box);
-                const card = box.querySelector('.flat-card');
-
-                setTimeout(() => {
-                    box.classList.remove('opacity-0');
-                    if(card) {
-                        card.classList.remove('scale-95');
-                        card.classList.remove('opacity-0');
-                    }
-                }, 10); 
-
-                box.querySelector('button').addEventListener('click', () => {
-                    box.classList.add('opacity-0');
-                    if(card) {
-                        card.classList.add('scale-95');
-                        card.classList.add('opacity-0');
-                    }
-                    setTimeout(() => box.remove(), 300);
-                });
+            // Tema
+            const initTheme = () => {
+                const stored = localStorage.getItem('theme') || 'light';
+                html.setAttribute('data-mode', stored);
+                toggleIcon.className = stored === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
             };
+            
+            darkModeToggle.addEventListener('click', () => {
+                const current = html.getAttribute('data-mode');
+                const next = current === 'dark' ? 'light' : 'dark';
+                html.setAttribute('data-mode', next);
+                localStorage.setItem('theme', next);
+                toggleIcon.className = next === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+            });
 
-            // Initial call
+            // Iniciar
+            initTheme();
             generateRows();
         });
     </script>
