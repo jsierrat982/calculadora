@@ -3,24 +3,37 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calculadora GC - V5 (Flat Design)</title>
+    <title>Calculadora GC - V5</title>
     
+    <!-- ICONO DE LA PESTAÑA (Favicon) -->
+    <!-- Asegúrate de subir la imagen con el nombre EXACTO: calculator_icon.png -->
     <link rel="icon" type="image/png" href="calculator_icon.png">
 
+    <!-- Tailwind CSS (CDN) -->
     <script src="https://cdn.tailwindcss.com"></script>
     
+    <!-- Font Awesome (Iconos) -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
+    <!-- Estilos Personalizados -->
     <link rel="stylesheet" href="style.css">
 </head>
-<body class="flex flex-col items-center justify-center p-4 py-8">
+<body class="flex flex-col items-center justify-center p-4 py-8 min-h-screen transition-colors duration-500">
 
-    <button id="darkModeToggle" class="fab flat-btn p-4 text-xl">
+    <!-- Botón de Modo Oscuro Flotante -->
+    <button id="darkModeToggle" class="fab flat-btn p-4 text-xl" aria-label="Cambiar modo oscuro">
         <i class="fas fa-moon" id="toggleIcon"></i>
     </button>
     
+    <!-- Contenedor principal -->
     <div class="flat-card p-4 md:p-8 max-w-4xl w-full mb-8">
         
+        <!-- Título y Header opcional para móvil -->
+        <div class="mb-4 md:hidden text-center">
+            <h1 class="text-lg font-bold text-gray-700 dark:text-gray-200">Calculadora GC</h1>
+        </div>
+
+        <!-- Tabla -->
         <div class="rounded-lg overflow-x-auto border border-gray-200 dark:border-gray-700">
             <table class="w-full text-left">
                 <thead>
@@ -35,20 +48,29 @@
                     </tr>
                 </thead>
                 <tbody id="resultsBody" class="text-sm">
-                    </tbody>
+                    <!-- Fila de carga por defecto (se borra si el JS funciona) -->
+                    <tr id="loadingRow">
+                        <td colspan="7" class="p-8 text-center text-gray-500">
+                            <i class="fas fa-spinner fa-spin mr-2"></i> Cargando datos...<br>
+                            <span class="text-xs text-red-400 mt-2 block">Si este mensaje no desaparece, verifica que el archivo script.js esté en la misma carpeta.</span>
+                        </td>
+                    </tr>
+                </tbody>
             </table>
         </div>
 
+        <!-- Controles -->
         <div class="mt-8 flex flex-col gap-5">
-            
             <div class="flex flex-wrap gap-3 justify-center items-center">
                 
-                <button id="saveBtn" class="flat-btn px-4 py-3 font-medium flex items-center text-sm relative" data-tooltip="Guardar Datos">
-                    <i class="fas fa-save text-base mr-1"></i> 
+                <!-- Guardar -->
+                <button id="saveBtn" class="flat-btn action-btn bg-green-500" title="Guardar Datos">
+                    <i class="fas fa-save"></i> 
                 </button>
                 
+                <!-- Selector -->
                 <div class="flex items-center gap-2">
-                    <select id="predefinedFileSelect" class="w-40 px-3 py-2 text-sm">
+                    <select id="predefinedFileSelect" class="bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none transition-colors">
                         <option value="">Seleccionar Archivo</option>
                         <option value="08-13-0400K">400 K - 08 - 13</option>
                         <option value="08-13-0450K">450 K - 08 - 13</option>
@@ -80,13 +102,19 @@
                     </select>
                 </div>
 
-                <button id="addRowBtn" class="flat-btn px-4 py-3 font-medium flex items-center text-sm relative" data-tooltip="Añadir Fila">
-                    <i class="fas fa-plus-circle text-base mr-1"></i> 
-                </button>
+                <!-- Botones de Acción -->
+                <button id="addRowBtn" class="flat-btn action-btn bg-blue-500" title="Añadir Fila"><i class="fas fa-plus-circle"></i></button>
+                <button id="addTopRowBtn" class="flat-btn action-btn bg-purple-500" title="Añadir Fila Superior"><i class="fas fa-plus-circle"></i></button>
+                <button id="removeRowBtn" class="flat-btn action-btn bg-red-500" title="Eliminar Última Fila"><i class="fas fa-trash-alt"></i></button>
+                <button id="removeTopRowBtn" class="flat-btn action-btn bg-orange-500" title="Eliminar Fila Superior"><i class="fas fa-chevron-circle-up"></i></button>
+                <button id="resetBtn" class="flat-btn action-btn bg-gray-500" title="Reiniciar"><i class="fas fa-redo-alt"></i></button>
+                
+            </div>
+        </div>
+    </div>
 
-                <button id="addTopRowBtn" class="flat-btn px-4 py-3 font-medium flex items-center text-sm relative" data-tooltip="Añadir Fila Superior">
-                    <i class="fas fa-plus-circle text-base mr-1"></i> 
-                </button>
-
-                <button id="removeRowBtn" class="flat-btn px-4 py-3 font-medium flex items-center text-sm relative" data-tooltip="Eliminar Última Fila">
-                    <i class="
+    <!-- ENLACE CRÍTICO AL SCRIPT -->
+    <!-- Asegúrate de que el archivo se llame script.js (todo minúsculas) -->
+    <script src="script.js"></script>
+</body>
+</html>
