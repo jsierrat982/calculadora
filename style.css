@@ -1,130 +1,89 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
-        
-/* Paleta Flat Design (Plano) */
-:root {
-    --primary: #3b82f6;      /* Azul Primario */
-    --secondary: #10b981;    /* Verde Secundario */
 
-    /* Modo Claro (Light Mode) */
-    --bg-light: #f9fafb; /* Un gris muy claro (Tailwind gray-50) */
-    --surface-light: #ffffff; /* Superficie de tarjeta y botones */
-    --shadow-light: none; /* Sin sombra */
-    --border-light: #e5e7eb; /* Borde sutil (Tailwind gray-200) */
+/* --- Variables CSS --- */
+:root {
+    --primary: #3b82f6;
+    --bg-light: #f9fafb;
+    --surface-light: #ffffff;
+    --border-light: #e5e7eb;
     --text-light: #374151;
     
-    /* Modo Oscuro (Dark Mode) */
     --bg-dark: #1f2937;
     --surface-dark: #374151;
-    --shadow-dark: none; /* Sin sombra */
-    --border-dark: #4b5563; /* Borde oscuro (Tailwind gray-600) */
+    --border-dark: #4b5563;
     --text-dark: #e5e7eb;
 }
 
+/* --- Base --- */
 body {
     font-family: 'Inter', sans-serif;
     background-color: var(--bg-light);
     color: var(--text-light);
-    transition: background-color 0.5s, color 0.5s;
-    min-height: 100vh;
 }
 
-/* --------------------------------- */
-/* --- ESTILOS FLAT DESIGN (PLANO) --- */
-/* --------------------------------- */
-
+/* --- Componentes Flat Design --- */
 .flat-card {
     background-color: var(--surface-light);
-    border-radius: 8px; /* Menos redondeado */
-    box-shadow: var(--shadow-light); /* Sin sombra */
-    transition: all 0.5s ease;
-    border: 1px solid var(--border-light); /* Borde definido */
-}
-
-.flat-card input,
-.flat-card select {
-    background-color: #ffffff; /* Fondo blanco para inputs */
-    border: 1px solid #d1d5db;
-    border-radius: 6px; /* Ligeramente redondeado */
-    color: var(--text-light);
+    border-radius: 12px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    border: 1px solid var(--border-light);
     transition: all 0.3s ease;
 }
 
-.flat-card input:focus,
-.flat-card select:focus {
-    border-color: var(--primary);
-    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3); /* Mantenemos el anillo de foco */
-    outline: none;
-}
-
-/* Botón base */
 .flat-btn {
-    border: none; /* Sin borde */
-    border-radius: 8px; /* Redondeado moderno */
-    box-shadow: var(--shadow-dark); /* Sin sombra */
-    transition: filter 0.2s ease;
-    font-weight: 500;
-    color: white; /* Texto blanco por defecto */
+    border: none;
+    border-radius: 8px;
+    color: white;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
 }
 
 .flat-btn:hover {
-    filter: brightness(90%); /* Efecto hover plano */
+    filter: brightness(90%);
+    transform: translateY(-1px);
 }
 
 .flat-btn:active {
-    filter: brightness(80%); /* Efecto active plano */
+    transform: translateY(0);
 }
 
-/* --------------------------------- */
-/* --- Colores Específicos Botones --- */
-/* --------------------------------- */
-
-#saveBtn { background-color: var(--secondary); }
-#addRowBtn { background-color: var(--primary); }
-#addTopRowBtn { background-color: #a855f7; } /* purple-500 */
-#removeRowBtn { background-color: #ef4444; } /* red-500 */
-#removeTopRowBtn { background-color: #f97316; } /* orange-500 */
-#resetBtn { background-color: #6b7280; } /* gray-500 */
-
-/* Iconos de botones de acción */
-#saveBtn .fas, #addRowBtn .fas, #addTopRowBtn .fas, #removeRowBtn .fas, #removeTopRowBtn .fas, #resetBtn .fas {
-    color: white !important; /* Forzar iconos a blanco */
+/* Botones de acción específicos */
+.action-btn {
+    width: 45px;
+    height: 45px;
+    font-size: 1.1rem;
 }
 
-/* Botón de Modo Oscuro (neutral) */
-#darkModeToggle {
-    background-color: var(--surface-light);
-    color: var(--text-light);
-    border: 1px solid var(--border-light);
-}
-#darkModeToggle .fas { color: var(--text-light) !important; }
-
-/* Estilos de la tabla (ya eran planos) */
+/* Header de Tabla */
 .table-header {
     background: var(--primary);
     color: white;
-    padding: 8px;
-    font-weight: 600;
 }
 
-.table-row-hover {
-    background-color: var(--surface-light);
-    border-bottom: 1px solid #e5e7eb;
-}
-
+/* Hover en filas */
 .table-row-hover:hover {
-    background-color: #f9fafb;
+    background-color: #f3f4f6;
 }
 
-/* --- CORRECCIÓN DE VISIBILIDAD DE OPCIONES --- */
-#predefinedFileSelect option {
-    background-color: white; 
-    color: #1f2937; 
+/* --- Inputs Personalizados --- */
+.custom-input {
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    transition: all 0.2s;
+    background-color: #fff;
+    color: #374151;
 }
 
-/* ---------------------------------- */
-/* --- ESTILOS DEL MODO OSCURO --- */
-/* ---------------------------------- */
+.custom-input:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+    outline: none;
+}
 
+/* --- Modo Oscuro --- */
 html[data-mode="dark"] body {
     background-color: var(--bg-dark);
     color: var(--text-dark);
@@ -132,98 +91,46 @@ html[data-mode="dark"] body {
 
 html[data-mode="dark"] .flat-card {
     background-color: var(--surface-dark);
-    box-shadow: var(--shadow-dark);
-    border: 1px solid var(--border-dark);
+    border-color: var(--border-dark);
 }
 
-html[data-mode="dark"] .flat-card input,
-html[data-mode="dark"] .flat-card select {
-    background-color: var(--surface-dark); /* Fondo de input más oscuro */
-    border: 1px solid #4b5563;
-    color: var(--text-dark);
-}
-
-/* Botones en modo oscuro (los de color no cambian, solo el de modo) */
-html[data-mode="dark"] #darkModeToggle {
-    background-color: var(--surface-dark);
-    color: var(--text-dark);
-    border: 1px solid var(--border-dark);
-}
-html[data-mode="dark"] #darkModeToggle .fas { color: var(--text-dark) !important; }
-
-
-html[data-mode="dark"] .table-row-hover {
-    background-color: var(--surface-dark);
-    border-bottom: 1px solid #4b5563;
-}
-
-html[data-mode="dark"] .table-row-hover:hover {
-    background-color: #4b5563; /* Un poco más oscuro para el hover */
-}
-
-/* --- NUEVO: Colores de ganancia más brillantes para Modo Oscuro --- */
-html[data-mode="dark"] .profit-cell.text-green-600 {
-    color: #4ade80 !important; /* Un verde más brillante (Tailwind green-500) */
-}
-
-html[data-mode="dark"] .profit-cell.text-red-600 {
-    color: #f87171 !important; /* Un rojo más brillante (Tailwind red-400) */
-}
-
-/* --- CORRECCIÓN DE VISIBILIDAD DE OPCIONES EN DARK MODE --- */
-html[data-mode="dark"] #predefinedFileSelect option {
-    background-color: #374151;
+html[data-mode="dark"] .custom-input,
+html[data-mode="dark"] select {
+    background-color: #4b5563;
+    border-color: #6b7280;
     color: white;
 }
 
-/* Estilo para el FAB (Botón de Acción Flotante) */
+html[data-mode="dark"] .table-row-hover:hover {
+    background-color: #4b5563;
+}
+
+html[data-mode="dark"] #predefinedFileSelect option {
+    background-color: #374151;
+}
+
+/* --- Colores de Ganancia --- */
+.profit-positive { color: #10b981; font-weight: 700; }
+.profit-negative { color: #ef4444; font-weight: 700; }
+html[data-mode="dark"] .profit-positive { color: #4ade80; }
+html[data-mode="dark"] .profit-negative { color: #f87171; }
+
+/* --- Botón Flotante --- */
 .fab {
     position: fixed;
     bottom: 20px;
     right: 20px;
-    z-index: 1000;
+    z-index: 50;
+    background-color: var(--surface-light);
+    color: var(--text-light);
+    border: 1px solid var(--border-light);
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
 }
 
-/* Estilos de Ganancia y Pérdida */
-.profit-cell.text-green-600 {
-    color: var(--secondary) !important;
-    font-weight: 600;
+html[data-mode="dark"] .fab {
+    background-color: var(--surface-dark);
+    color: var(--text-dark);
+    border-color: var(--border-dark);
 }
 
-.profit-cell.text-red-600 {
-    color: #ef4444 !important;
-    font-weight: 600;
-}
-
-/* --- CORRECCIÓN: ESTILOS PARA TOOLTIPS --- */
-[data-tooltip] {
-    position: relative;
-}
-[data-tooltip]::after {
-    content: attr(data-tooltip);
-    position: absolute;
-    bottom: 125%; /* Posición arriba del botón */
-    left: 50%;
-    transform: translateX(-50%);
-    background-color: #374151; /* Fondo oscuro */
-    color: white;
-    padding: 4px 8px;
-    border-radius: 6px;
-    font-size: 0.8rem;
-    font-weight: 500;
-    white-space: nowrap;
-    opacity: 0;
-    visibility: hidden;
-    transition: opacity 0.2s ease, visibility 0.2s ease;
-    z-index: 10;
-}
-[data-tooltip]:hover::after {
-    opacity: 1;
-    visibility: visible;
-}
-
-/* --- NUEVO: Color para el icono del sol --- */
-/* !important añadido para asegurar que sobreescriba otras reglas */
-#toggleIcon.fa-sun {
-    color: #f59e0b !important; /* Un amarillo sol (Tailwind yellow-500) */
-}
+#toggleIcon.fa-sun { color: #fbbf24; }
