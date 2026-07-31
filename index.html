@@ -13,7 +13,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="styles.css">
 </head>
-<body class="flex flex-col items-center min-h-screen p-4">
+<body class="flex flex-col items-center min-h-screen p-2 md:p-4">
 
     <!-- Botón flotante para cambiar tema -->
     <button id="darkModeToggle" class="fab flat-btn p-4 text-xl" aria-label="Cambiar tema a modo oscuro">
@@ -21,22 +21,22 @@
     </button>
 
     <!-- Encabezado principal (Semántico) -->
-    <header class="w-full max-w-5xl md:hidden mb-4">
+    <header class="w-full max-w-5xl md:hidden mb-4 text-center">
         <h1 class="text-2xl font-bold text-gray-700 dark:text-gray-200">Calculadora GC</h1>
     </header>
 
     <!-- Contenido Principal -->
-    <main class="w-full max-w-5xl mb-20 md:mb-8">
+    <main class="w-full max-w-6xl mb-20 md:mb-8">
         <section class="flat-card overflow-hidden" aria-labelledby="section-title">
             <h2 id="section-title" class="sr-only">Tabla de cálculos de inversiones y ganancias</h2>
 
             <div class="overflow-x-auto">
                 <table class="w-full text-left border-collapse whitespace-nowrap">
                     <thead>
-                        <tr class="table-header text-sm uppercase tracking-wider">
+                        <tr class="table-header text-xs md:text-sm uppercase tracking-wider">
                             <th scope="col" class="p-3 text-center">#</th>
-                            <th scope="col" class="p-3">Ent</th>
-                            <th scope="col" class="p-3">Valor</th>
+                            <th scope="col" class="p-3 text-center">Ent</th>
+                            <th scope="col" class="p-3 text-center">Valor</th>
                             <th scope="col" class="p-3">Carga</th>
                             <th scope="col" class="p-3">Inv</th>
                             <th scope="col" class="p-3">Pago</th>
