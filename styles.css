@@ -1,6 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 
-/* Variables CSS para facilitar el modo claro/oscuro */
+/* Variables CSS (:root) */
 :root {
     --primary: #3b82f6;
     --bg-color: #f9fafb;
@@ -10,6 +10,8 @@
     --hover-bg: #f3f4f6;
     --profit-pos: #10b981;
     --profit-neg: #ef4444;
+    --stepper-bg: #e5e7eb;
+    --stepper-hover: #d1d5db;
 }
 
 html[data-mode="dark"] {
@@ -20,6 +22,8 @@ html[data-mode="dark"] {
     --hover-bg: #4b5563;
     --profit-pos: #4ade80;
     --profit-neg: #f87171;
+    --stepper-bg: #4b5563;
+    --stepper-hover: #6b7280;
 }
 
 body {
@@ -71,19 +75,62 @@ body {
     background-color: var(--hover-bg); 
 }
 
-/* Inputs de Tabla */
-.custom-input {
+/* --- OCULTAR FLECHAS NATIVAS DE INPUT NUMBER --- */
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+input[type="number"] {
+    -moz-appearance: textfield; /* Firefox */
+}
+
+/* --- CONTROLES STEPPER (+ / -) TÁCTILES --- */
+.stepper-wrapper {
+    display: inline-flex;
+    align-items: center;
     border: 1px solid var(--border-color);
     border-radius: 6px;
+    overflow: hidden;
     background-color: var(--surface-color);
+}
+
+.stepper-btn {
+    background-color: var(--stepper-bg);
     color: var(--text-color);
-    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    border: none;
+    width: 28px;
+    height: 32px;
+    font-weight: bold;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.15s ease;
+    user-select: none;
+}
+
+.stepper-btn:hover {
+    background-color: var(--stepper-hover);
+}
+
+.stepper-btn:active {
+    background-color: var(--primary);
+    color: #ffffff;
+}
+
+/* Inputs de Tabla dentro del Stepper */
+.custom-input {
+    border: none;
+    background-color: transparent;
+    color: var(--text-color);
+    height: 32px;
+    font-weight: 500;
 }
 
 .custom-input:focus {
-    border-color: var(--primary);
     outline: none;
-    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+    background-color: rgba(59, 130, 246, 0.1);
 }
 
 .action-container {
