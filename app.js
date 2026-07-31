@@ -1,4 +1,4 @@
-// Base de Datos Predefinida (Desacoplada para legibilidad y orden)
+// Base de Datos Predefinida
 const PREDEFINED_DATA = {
     '30-09-14-1060M': { values: [400, 700, 1250, 2250, 3900, 6600, 11150, 18700, 30600], positions: [30, 14, 14, 14, 14, 14, 14, 14, 14] },
     '08-13-0400K': { values: [250, 500, 1000, 1750, 3000, 4750, 7750, 12000], positions: [12, 13, 13, 13, 13, 13, 13, 13] },
@@ -35,13 +35,12 @@ const PREDEFINED_DATA = {
 
 const DEFAULT_INITIAL_VALUES = [250, 500, 1000, 2000, 4000, 7500, 13000, 22000, 37000, 61500];
 
-// Estado de la Aplicación modelado como Arreglo de Objetos
+// Estado de la Aplicación
 let tableDataState = DEFAULT_INITIAL_VALUES.map(val => ({
     position: 14,
     value: val
 }));
 
-// Utilidad para formateo monetario (Cacheada en el módulo para mejor rendimiento)
 const currencyFormatter = new Intl.NumberFormat('en-US', {
     style: 'currency',
     currency: 'USD',
@@ -79,7 +78,7 @@ const calculateAndDisplay = () => {
 
 const generateRows = () => {
     const resultsBody = document.getElementById('resultsBody');
-    resultsBody.innerHTML = ''; // Limpiamos el DOM antes de renderizar
+    resultsBody.innerHTML = '';
 
     if (tableDataState.length === 0) {
         resultsBody.innerHTML = `
@@ -98,21 +97,30 @@ const generateRows = () => {
         row.className = 'table-row-hover text-sm border-b border-gray-100 dark:border-gray-700 transition-colors';
         row.dataset.index = index;
 
+        // Estructura con botones táctiles (+ / -) integrados
         row.innerHTML = `
             <td class="p-3 text-center text-gray-500 font-medium">${index + 1}</td>
-            <td class="p-3">
-                <input type="number" 
-                       aria-label="Posición de entrada para fila ${index + 1}"
-                       class="w-12 md:w-16 px-1 py-1 custom-input position-input text-center text-sm" 
-                       value="${item.position}" min="1" max="36">
+            <td class="p-2 md:p-3 text-center">
+                <div class="stepper-wrapper">
+                    <button type="button" class="stepper-btn step-btn" data-action="decrement" data-field="position" aria-label="Disminuir posición">-</button>
+                    <input type="number" 
+                           aria-label="Posición de entrada para fila ${index + 1}"
+                           class="w-10 md:w-12 custom-input position-input text-center text-sm" 
+                           value="${item.position}" min="1" max="36">
+                    <button type="button" class="stepper-btn step-btn" data-action="increment" data-field="position" aria-label="Aumentar posición">+</button>
+                </div>
             </td>
-            <td class="p-3">
-                <div class="relative flex items-center">
-                    <span class="absolute left-2 text-gray-400 text-xs" aria-hidden="true">$</span>
-                    <input type="number" step="50" 
-                           aria-label="Valor inicial para fila ${index + 1}"
-                           class="w-24 md:w-28 pl-5 pr-2 py-1 custom-input initial-value-input text-sm" 
-                           value="${item.value}">
+            <td class="p-2 md:p-3 text-center">
+                <div class="stepper-wrapper">
+                    <button type="button" class="stepper-btn step-btn" data-action="decrement" data-field="value" aria-label="Disminuir valor">-</button>
+                    <div class="relative flex items-center">
+                        <span class="absolute left-1.5 text-gray-400 text-xs" aria-hidden="true">$</span>
+                        <input type="number" step="50" 
+                               aria-label="Valor inicial para fila ${index + 1}"
+                               class="w-16 md:w-20 pl-4 pr-1 custom-input initial-value-input text-center text-sm" 
+                               value="${item.value}">
+                    </div>
+                    <button type="button" class="stepper-btn step-btn" data-action="increment" data-field="value" aria-label="Aumentar valor">+</button>
                 </div>
             </td>
             <td class="p-3 charge-cell font-medium"></td>
@@ -159,7 +167,7 @@ const toggleTheme = () => {
 document.addEventListener('DOMContentLoaded', () => {
     const resultsBody = document.getElementById('resultsBody');
 
-    // Delegación de eventos para inputs de la tabla
+    // 1. Delegación para escritura manual en los inputs
     resultsBody.addEventListener('input', (e) => {
         const target = e.target;
         if (!target.classList.contains('position-input') && !target.classList.contains('initial-value-input')) return;
@@ -175,6 +183,37 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             calculateAndDisplay();
         }
+    });
+
+    // 2. Delegación para clics en los botones Stepper (+ y -)
+    resultsBody.addEventListener('click', (e) => {
+        const btn = e.target.closest('.step-btn');
+        if (!btn) return;
+
+        const row = btn.closest('tr');
+        const index = Number(row.dataset.index);
+        const field = btn.dataset.field;
+        const action = btn.dataset.action;
+
+        if (isNaN(index) || !tableDataState[index]) return;
+
+        const item = tableDataState[index];
+
+        if (field === 'position') {
+            const step = 1;
+            item.position = action === 'increment'
+                ? Math.min(36, item.position + step)
+                : Math.max(1, item.position - step);
+            row.querySelector('.position-input').value = item.position;
+        } else if (field === 'value') {
+            const step = 50; // Salto de $50 para agilizar en móvil
+            item.value = action === 'increment'
+                ? item.value + step
+                : Math.max(0, item.value - step);
+            row.querySelector('.initial-value-input').value = item.value;
+        }
+
+        calculateAndDisplay();
     });
 
     document.getElementById('addRowBtn').addEventListener('click', () => {
