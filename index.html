@@ -371,7 +371,7 @@
 
             addTopRowBtn.addEventListener('click', () => {
                 const firstVal = initialValues.length > 0 ? initialValues[0] : defaultInitialValues[0];
-                initialValues.unshift(Math.max(, Math.round(firstVal / 2)));
+                initialValues.unshift(Math.max(50, Math.round(firstVal / 2)));
                 positionValues.unshift(14);
                 generateRows();
             });
