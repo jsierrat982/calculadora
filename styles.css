@@ -1,0 +1,112 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+/* Variables CSS para facilitar el modo claro/oscuro */
+:root {
+    --primary: #3b82f6;
+    --bg-color: #f9fafb;
+    --surface-color: #ffffff;
+    --border-color: #e5e7eb;
+    --text-color: #374151;
+    --hover-bg: #f3f4f6;
+    --profit-pos: #10b981;
+    --profit-neg: #ef4444;
+}
+
+html[data-mode="dark"] {
+    --bg-color: #1f2937;
+    --surface-color: #374151;
+    --border-color: #4b5563;
+    --text-color: #e5e7eb;
+    --hover-bg: #4b5563;
+    --profit-pos: #4ade80;
+    --profit-neg: #f87171;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    transition: background-color 0.3s ease, color 0.3s ease;
+    padding-bottom: 80px;
+}
+
+/* Tarjetas y Estructura Base */
+.flat-card {
+    background-color: var(--surface-color);
+    border-radius: 12px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    border: 1px solid var(--border-color);
+    transition: all 0.3s ease;
+}
+
+/* Botones Accesibles */
+.flat-btn {
+    border: none;
+    border-radius: 8px;
+    color: #ffffff;
+    transition: transform 0.1s ease, background-color 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.flat-btn:active { 
+    transform: scale(0.95); 
+}
+
+.action-btn {
+    width: 42px;
+    height: 42px;
+    font-size: 1.1rem;
+}
+
+/* Tabla y Filas */
+.table-header { 
+    background: var(--primary); 
+    color: #ffffff; 
+}
+
+.table-row-hover:hover { 
+    background-color: var(--hover-bg); 
+}
+
+/* Inputs de Tabla */
+.custom-input {
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    background-color: var(--surface-color);
+    color: var(--text-color);
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.custom-input:focus {
+    border-color: var(--primary);
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+}
+
+.action-container {
+    background-color: var(--surface-color);
+    border-top-color: var(--border-color);
+}
+
+/* Colores Dinámicos para Resultados */
+.profit-positive { color: var(--profit-pos); font-weight: 700; }
+.profit-negative { color: var(--profit-neg); font-weight: 700; }
+
+/* Botón Flotante para Modo Oscuro */
+.fab {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 50;
+    background-color: var(--surface-color);
+    color: var(--text-color);
+    border: 1px solid var(--border-color);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+#toggleIcon.fa-sun { 
+    color: #fbbf24; 
+}

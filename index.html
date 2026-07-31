@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="es" data-mode="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#3b82f6">
+    <title>Calculadora GC - V5</title>
+    
+    <link rel="icon" type="image/png" href="calculator_icon.png">
+    <link rel="apple-touch-icon" href="calculator_icon.png">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="flex flex-col items-center min-h-screen p-4">
+
+    <!-- Botón flotante para cambiar tema -->
+    <button id="darkModeToggle" class="fab flat-btn p-4 text-xl" aria-label="Cambiar tema a modo oscuro">
+        <i class="fas fa-moon" id="toggleIcon" aria-hidden="true"></i>
+    </button>
+
+    <!-- Encabezado principal (Semántico) -->
+    <header class="w-full max-w-5xl md:hidden mb-4">
+        <h1 class="text-2xl font-bold text-gray-700 dark:text-gray-200">Calculadora GC</h1>
+    </header>
+
+    <!-- Contenido Principal -->
+    <main class="w-full max-w-5xl mb-20 md:mb-8">
+        <section class="flat-card overflow-hidden" aria-labelledby="section-title">
+            <h2 id="section-title" class="sr-only">Tabla de cálculos de inversiones y ganancias</h2>
+
+            <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse whitespace-nowrap">
+                    <thead>
+                        <tr class="table-header text-sm uppercase tracking-wider">
+                            <th scope="col" class="p-3 text-center">#</th>
+                            <th scope="col" class="p-3">Ent</th>
+                            <th scope="col" class="p-3">Valor</th>
+                            <th scope="col" class="p-3">Carga</th>
+                            <th scope="col" class="p-3">Inv</th>
+                            <th scope="col" class="p-3">Pago</th>
+                            <th scope="col" class="p-3">Ganancia</th>
+                        </tr>
+                    </thead>
+                    <tbody id="resultsBody" class="text-sm" aria-live="polite">
+                        <tr id="loadingRow">
+                            <td colspan="7" class="p-10 text-center text-gray-500 dark:text-gray-400">
+                                <i class="fas fa-circle-notch fa-spin text-3xl mb-2 text-blue-500" aria-hidden="true"></i>
+                                <br>Cargando aplicación...
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Barra de Herramientas de Control -->
+            <footer class="p-4 bg-gray-50 dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 action-container" aria-label="Acciones de control de tabla">
+                <div class="flex flex-col md:flex-row justify-between items-center gap-4">
+                    
+                    <div class="flex w-full md:w-auto gap-2 items-center">
+                        <button id="saveBtn" class="flat-btn action-btn bg-emerald-500 hover:bg-emerald-600 flex-shrink-0" aria-label="Guardar datos como archivo">
+                            <i class="fas fa-save" aria-hidden="true"></i>
+                        </button>
+                        <div class="relative w-full">
+                            <label for="predefinedFileSelect" class="sr-only">Seleccionar plantilla prediseñada</label>
+                            <select id="predefinedFileSelect" class="w-full md:w-64 h-full pl-3 pr-8 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 text-sm appearance-none focus:ring-2 focus:ring-blue-500 outline-none">
+                                <option value="">Seleccionar Archivo...</option>
+                                <option value="30-09-14-1060M">1060 M - 09 - 14</option>
+                                <option value="08-13-0400K">400 K - 08 - 13</option>
+                                <option value="08-13-0450K">450 K - 08 - 13</option>
+                                <option value="08-13-0500K">500 K - 08 - 13</option>
+                                <option value="08-14-0500K">500 K - 08 - 14</option>
+                                <option value="08-14-0550K">550 K - 08 - 14</option>
+                                <option value="08-14-0600K">600 K - 08 - 14</option>
+                                <option value="09-13-0600K">600 K - 09 - 13</option>
+                                <option value="09-13-0640K">640 K - 09 - 13</option>
+                                <option value="09-13-0700K">700 K - 09 - 13</option>
+                                <option value="09-14-0750K">750 K - 09 - 14</option>
+                                <option value="09-14-0800K">800 K - 09 - 14</option>
+                                <option value="09-14-0850K">850 K - 09 - 14</option>
+                                <option value="09-14-0900K">900 K - 09 - 14</option>
+                                <option value="09-14-0950K">950 K - 09 - 14</option>
+                                <option value="09-14-1000M">1000 M - 09 - 14</option>
+                                <option value="09-14-1050M">1050 M - 09 - 14</option>
+                                <option value="10-13-1100M">1100 M - 10 - 13</option>
+                                <option value="09-14-1200M">1200 M - 09 - 14</option>
+                                <option value="10-14-1200M">1200 M - 10 - 14</option>
+                                <option value="10-14-1250M">1250 M - 10 - 14</option>
+                                <option value="10-14-1450M">1450 M - 10 - 14</option>
+                                <option value="10-14-1700M">1700 M - 10 - 14</option>
+                                <option value="10-14-1750M">1750 M - 10 - 14</option>
+                                <option value="10-14-1800M">1800 M - 10 - 14</option>
+                                <option value="10-14-1850M">1850 M - 10 - 14</option>
+                                <option value="10-14-1900M">1900 M - 10 - 14</option>
+                                <option value="10-14-2000M">2000 M - 10 - 14</option>
+                                <option value="11-13-2000M">2000 M - 11 - 13</option>
+                                <option value="8000_400K_08_13">$8000 400K 08 13</option>
+                                <option value="16000_700K_08_14">$16000 700K 08 14</option>
+                            </select>
+                            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-500">
+                                <i class="fas fa-chevron-down text-xs" aria-hidden="true"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-wrap justify-center gap-3 w-full md:w-auto">
+                        <button id="addRowBtn" class="flat-btn action-btn bg-blue-500 hover:bg-blue-600" aria-label="Añadir Fila al final" title="Añadir Fila"><i class="fas fa-plus" aria-hidden="true"></i></button>
+                        <button id="addTopRowBtn" class="flat-btn action-btn bg-purple-500 hover:bg-purple-600" aria-label="Añadir Fila al principio" title="Añadir Arriba"><i class="fas fa-arrow-up" aria-hidden="true"></i></button>
+                        <div class="w-px h-10 bg-gray-300 dark:bg-gray-600 mx-1 hidden md:block"></div>
+                        <button id="removeRowBtn" class="flat-btn action-btn bg-red-500 hover:bg-red-600" aria-label="Borrar última fila" title="Borrar Fila"><i class="fas fa-trash" aria-hidden="true"></i></button>
+                        <button id="removeTopRowBtn" class="flat-btn action-btn bg-orange-500 hover:bg-orange-600" aria-label="Borrar primera fila" title="Borrar Arriba"><i class="fas fa-backspace" aria-hidden="true"></i></button>
+                        <button id="resetBtn" class="flat-btn action-btn bg-gray-500 hover:bg-gray-600 ml-auto md:ml-0" aria-label="Reiniciar valores" title="Reiniciar"><i class="fas fa-redo" aria-hidden="true"></i></button>
+                    </div>
+                </div>
+            </footer>
+        </section>
+    </main>
+
+    <script src="app.js" type="module"></script>
+</body>
+</html>
