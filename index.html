@@ -169,6 +169,7 @@
                     <div class="relative w-full">
                         <select id="predefinedFileSelect" class="w-full md:w-64 h-full pl-3 pr-8 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 text-sm appearance-none focus:ring-2 focus:ring-blue-500 outline-none">
                             <option value="">Seleccionar Archivo...</option>
+                            <option value="30 - 09-14-1060M">1060 M - 09 - 14</option>
                             <option value="08-13-0400K">400 K - 08 - 13</option>
                             <option value="08-13-0450K">450 K - 08 - 13</option>
                             <option value="08-13-0500K">500 K - 08 - 13</option>
@@ -243,6 +244,7 @@
 
             // Datos Predefinidos
             const predefinedData = {
+                "30 - 09-14-1060M": { "initialValues": [400,700,1250,2250,3900,6600,11150,18700,30600],"positionValues":[30,14,14,14,14,14,14,14,14]},
                 '08-13-0400K': { "initialValues": [250, 500, 1000, 1750, 3000, 4750, 7750, 12000], "positionValues": [12, 13, 13, 13, 13, 13, 13, 13] },
                 '08-13-0450K': { "initialValues": [250, 500, 1000, 2000, 3250, 5250, 8750, 13750], "positionValues": [12, 13, 13, 13, 13, 13, 13, 13] },
                 '08-13-0500K': { "initialValues": [250, 500, 1000, 2000, 3500, 6000, 9750, 15500], "positionValues": [12, 13, 13, 13, 13, 13, 13, 13] },
