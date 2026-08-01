@@ -1,3 +1,6 @@
+// Clave única para guardar en LocalStorage
+const STORAGE_KEY = 'calculadora_gc_state';
+
 // Base de Datos Predefinida
 const PREDEFINED_DATA = {
     '30-09-14-1060M': { values: [400, 700, 1250, 2250, 3900, 6600, 11150, 18700, 30600], positions: [30, 14, 14, 14, 14, 14, 14, 14, 14] },
@@ -35,11 +38,36 @@ const PREDEFINED_DATA = {
 
 const DEFAULT_INITIAL_VALUES = [250, 500, 1000, 2000, 4000, 7500, 13000, 22000, 37000, 61500];
 
-// Estado de la Aplicación
-let tableDataState = DEFAULT_INITIAL_VALUES.map(val => ({
-    position: 14,
-    value: val
-}));
+// --- GESTIÓN DE PERSISTENCIA (LOCALSTORAGE) ---
+const saveStateToStorage = () => {
+    try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(tableDataState));
+    } catch (error) {
+        console.warn('No se pudo guardar en localStorage (¿Modo incógnito activo?):', error);
+    }
+};
+
+const loadStateFromStorage = () => {
+    try {
+        const savedData = localStorage.getItem(STORAGE_KEY);
+        if (savedData) {
+            const parsed = JSON.parse(savedData);
+            if (Array.isArray(parsed) && parsed.length > 0) {
+                return parsed;
+            }
+        }
+    } catch (error) {
+        console.warn('No se pudo cargar de localStorage:', error);
+    }
+    // Retorna por defecto si no hay nada guardado
+    return DEFAULT_INITIAL_VALUES.map(val => ({
+        position: 14,
+        value: val
+    }));
+};
+
+// Estado de la Aplicación (Cargado desde Storage si existe)
+let tableDataState = loadStateFromStorage();
 
 const currencyFormatter = new Intl.NumberFormat('en-US', {
     style: 'currency',
@@ -74,6 +102,9 @@ const calculateAndDisplay = () => {
         profitCell.textContent = formatCurrency(profit);
         profitCell.className = `p-3 profit-cell font-medium ${profit >= 0 ? 'profit-positive' : 'profit-negative'}`;
     });
+
+    // Guardar los datos de forma automática en cada cálculo
+    saveStateToStorage();
 };
 
 const generateRows = () => {
@@ -87,6 +118,7 @@ const generateRows = () => {
                     No hay filas. Usa el botón azul para añadir.
                 </td>
             </tr>`;
+        saveStateToStorage();
         return;
     }
 
@@ -97,7 +129,6 @@ const generateRows = () => {
         row.className = 'table-row-hover text-sm border-b border-gray-100 dark:border-gray-700 transition-colors';
         row.dataset.index = index;
 
-        // Estructura con botones táctiles (+ / -) integrados
         row.innerHTML = `
             <td class="p-3 text-center text-gray-500 font-medium">${index + 1}</td>
             <td class="p-2 md:p-3 text-center">
@@ -167,7 +198,7 @@ const toggleTheme = () => {
 document.addEventListener('DOMContentLoaded', () => {
     const resultsBody = document.getElementById('resultsBody');
 
-    // 1. Delegación para escritura manual en los inputs
+    // Delegación para inputs directos
     resultsBody.addEventListener('input', (e) => {
         const target = e.target;
         if (!target.classList.contains('position-input') && !target.classList.contains('initial-value-input')) return;
@@ -185,7 +216,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // 2. Delegación para clics en los botones Stepper (+ y -)
+    // Delegación para botones de incremento/decremento (+ / -)
     resultsBody.addEventListener('click', (e) => {
         const btn = e.target.closest('.step-btn');
         if (!btn) return;
@@ -206,7 +237,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 : Math.max(1, item.position - step);
             row.querySelector('.position-input').value = item.position;
         } else if (field === 'value') {
-            const step = 50; // Salto de $50 para agilizar en móvil
+            const step = 50;
             item.value = action === 'increment'
                 ? item.value + step
                 : Math.max(0, item.value - step);
@@ -248,6 +279,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+    // Botón Reset: Restaura los valores iniciales por defecto y limpia el almacenamiento
     document.getElementById('resetBtn').addEventListener('click', () => {
         tableDataState = DEFAULT_INITIAL_VALUES.map(val => ({
             position: 14,
@@ -288,7 +320,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     document.getElementById('darkModeToggle').addEventListener('click', toggleTheme);
 
-    // Bootstrap
+    // Bootstrap de la aplicación
     initTheme();
     generateRows();
 });
