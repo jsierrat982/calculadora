@@ -1,0 +1,58 @@
+name: Compilar y Desplegar Calculadora
+
+# El flujo se ejecutará cada vez que hagas push a la rama main
+on:
+  push:
+    branches: ["main"]
+  workflow_dispatch:
+
+# Permisos necesarios para que Actions pueda publicar en Pages
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Descargar el código del repositorio
+        uses: actions/checkout@v4
+
+      - name: Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Instalar dependencias de Tailwind
+        run: npm install
+
+      - name: Crear directorio de distribución y preparar archivos
+        run: |
+          mkdir -p dist
+          cp index.html dist/
+          cp app.js dist/
+          cp calculator_icon.png dist/ 2>/dev/null || true
+
+      - name: Compilar y minificar CSS
+        run: npm run build:css
+
+      - name: Subir artefacto para Pages
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./dist
+
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Desplegar en GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
