@@ -1,0 +1,10 @@
+{
+  "name": "calculadora-gc",
+  "version": "1.0.0",
+  "scripts": {
+    "build:css": "tailwindcss -i ./styles.css -o ./dist/styles.css --minify"
+  },
+  "devDependencies": {
+    "tailwindcss": "^3.4.0"
+  }
+}
