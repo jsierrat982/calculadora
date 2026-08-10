@@ -1,5 +1,6 @@
-// Clave única para guardar en LocalStorage
+// Claves únicas para guardar en LocalStorage
 const STORAGE_KEY = 'calculadora_gc_state';
+const INTERVAL_STORAGE_KEY = 'calculadora_gc_interval';
 
 // Base de Datos Predefinida
 const PREDEFINED_DATA = {
@@ -43,7 +44,7 @@ const saveStateToStorage = () => {
     try {
         localStorage.setItem(STORAGE_KEY, JSON.stringify(tableDataState));
     } catch (error) {
-        console.warn('No se pudo guardar en localStorage (¿Modo incógnito activo?):', error);
+        console.warn('No se pudo guardar en localStorage:', error);
     }
 };
 
@@ -59,15 +60,27 @@ const loadStateFromStorage = () => {
     } catch (error) {
         console.warn('No se pudo cargar de localStorage:', error);
     }
-    // Retorna por defecto si no hay nada guardado
     return DEFAULT_INITIAL_VALUES.map(val => ({
         position: 14,
         value: val
     }));
 };
 
-// Estado de la Aplicación (Cargado desde Storage si existe)
+// Cargar preferencia del Intervalo de incremento
+const loadIntervalFromStorage = () => {
+    try {
+        const saved = localStorage.getItem(INTERVAL_STORAGE_KEY);
+        const parsed = parseInt(saved, 10);
+        if (!isNaN(parsed) && parsed > 0) return parsed;
+    } catch (error) {
+        console.warn('No se pudo cargar intervalo de localStorage');
+    }
+    return 50; // Valor por defecto intuitivo
+};
+
+// Estado de la Aplicación
 let tableDataState = loadStateFromStorage();
+let currentInterval = loadIntervalFromStorage(); 
 
 const currencyFormatter = new Intl.NumberFormat('en-US', {
     style: 'currency',
@@ -103,7 +116,6 @@ const calculateAndDisplay = () => {
         profitCell.className = `p-3 profit-cell font-medium ${profit >= 0 ? 'profit-positive' : 'profit-negative'}`;
     });
 
-    // Guardar los datos de forma automática en cada cálculo
     saveStateToStorage();
 };
 
@@ -129,6 +141,7 @@ const generateRows = () => {
         row.className = 'table-row-hover text-sm border-b border-gray-100 dark:border-gray-700 transition-colors';
         row.dataset.index = index;
 
+        // SE INYECTA EL CURRENT_INTERVAL DINÁMICO EN EL ATRIBUTO "STEP"
         row.innerHTML = `
             <td class="p-3 text-center text-gray-500 font-medium">${index + 1}</td>
             <td class="p-2 md:p-3 text-center">
@@ -146,7 +159,7 @@ const generateRows = () => {
                     <button type="button" class="stepper-btn step-btn" data-action="decrement" data-field="value" aria-label="Disminuir valor">-</button>
                     <div class="relative flex items-center">
                         <span class="absolute left-1.5 text-gray-400 text-xs" aria-hidden="true">$</span>
-                        <input type="number" step="50" 
+                        <input type="number" step="${currentInterval}" 
                                aria-label="Valor inicial para fila ${index + 1}"
                                class="w-16 md:w-20 pl-4 pr-1 custom-input initial-value-input text-center text-sm" 
                                value="${item.value}">
@@ -171,9 +184,7 @@ const initTheme = () => {
     let stored = 'light';
     try {
         stored = localStorage.getItem('theme') || 'light';
-    } catch (e) {
-        console.warn('Almacenamiento local restringido:', e);
-    }
+    } catch (e) {}
     
     document.documentElement.setAttribute('data-mode', stored);
     toggleIcon.className = stored === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
@@ -188,17 +199,37 @@ const toggleTheme = () => {
     html.setAttribute('data-mode', next);
     try {
         localStorage.setItem('theme', next);
-    } catch (e) {
-        console.warn('No se pudo guardar la preferencia de tema:', e);
-    }
+    } catch (e) {}
     toggleIcon.className = next === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
 };
 
 // Event Listeners e Inicialización
 document.addEventListener('DOMContentLoaded', () => {
     const resultsBody = document.getElementById('resultsBody');
+    const intervalInputUI = document.getElementById('intervalConfig');
 
-    // Delegación para inputs directos
+    // Inicializar el valor visual del campo de intervalo al cargar
+    intervalInputUI.value = currentInterval;
+
+    // Validación y guardado dinámico del intervalo
+    intervalInputUI.addEventListener('change', (e) => {
+        let val = parseInt(e.target.value, 10);
+        
+        // Validar si el valor es negativo, cero, o texto corrupto
+        if (isNaN(val) || val <= 0) {
+            e.target.value = currentInterval; // Restaurar el último válido
+            return;
+        }
+
+        currentInterval = val;
+        try {
+            localStorage.setItem(INTERVAL_STORAGE_KEY, currentInterval);
+        } catch(err) {}
+
+        // Regenerar la tabla para que los atributos 'step' de los input HTML se actualicen
+        generateRows(); 
+    });
+
     resultsBody.addEventListener('input', (e) => {
         const target = e.target;
         if (!target.classList.contains('position-input') && !target.classList.contains('initial-value-input')) return;
@@ -216,7 +247,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // Delegación para botones de incremento/decremento (+ / -)
     resultsBody.addEventListener('click', (e) => {
         const btn = e.target.closest('.step-btn');
         if (!btn) return;
@@ -237,7 +267,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 : Math.max(1, item.position - step);
             row.querySelector('.position-input').value = item.position;
         } else if (field === 'value') {
-            const step = 50;
+            // AQUÍ AHORA SE UTILIZA LA VARIABLE DINÁMICA
+            const step = currentInterval; 
             item.value = action === 'increment'
                 ? item.value + step
                 : Math.max(0, item.value - step);
@@ -260,7 +291,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const firstItem = tableDataState.length > 0 ? tableDataState[0] : { position: 14, value: DEFAULT_INITIAL_VALUES[0] };
         tableDataState.unshift({
             position: 14,
-            value: Math.max(50, Math.round(firstItem.value / 2))
+            // AQUÍ SE REEMPLAZA EL 50 POR LA VARIABLE DINÁMICA currentInterval
+            value: Math.max(currentInterval, Math.round(firstItem.value / 2))
         });
         generateRows();
     });
@@ -279,7 +311,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // Botón Reset: Restaura los valores iniciales por defecto y limpia el almacenamiento
     document.getElementById('resetBtn').addEventListener('click', () => {
         tableDataState = DEFAULT_INITIAL_VALUES.map(val => ({
             position: 14,
@@ -320,7 +351,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     document.getElementById('darkModeToggle').addEventListener('click', toggleTheme);
 
-    // Bootstrap de la aplicación
+    // Bootstrap
     initTheme();
     generateRows();
 });
